@@ -59,8 +59,13 @@ for row in player_bar(rows):
     for year_row in career_rows:
         year_link = year_row.a
         year_name = year_link.text
+
+        # The year_link initially has "?view=profile", but we don't want that.
         base_year_url = urljoin(player_url, year_link["href"])
+        stop = base_year_url.find("?")
+        base_year_url = base_year_url[:stop]
         year_url = base_year_url + "?view=gamelog"
+
         year_page = req.urlopen(year_url).read().decode("utf8")
         with open("{}/{}.html".format(dir_name, year_name), "w") as f:
             f.write(year_page)
