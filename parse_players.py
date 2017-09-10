@@ -60,7 +60,11 @@ if __name__ == "__main__":
                 # the third the result. We only care about the fourth and on,
                 # where the stats are.
                 stats = row.find_all("td")[3:]
-                stats = [s.text for s in stats]
+
+                # "Empty" stats should be left empty, not given meaningless
+                # symbols. At OU, the empty stats are marked with "-", so we'll
+                # make those blank.
+                stats = [s.text if s.text != "-" else "" for s in stats]
                 year_stats.append(stats)
 
             # Strip the ".html" from the year filename, then replace it with
