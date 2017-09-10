@@ -88,13 +88,13 @@ if __name__ == "__main__":
 
     plt.figure(0)
     ax = plt.gca()
-    df[["k", "e", "ta"]].dropna().plot.line(ax=ax)
+    df[["k", "e", "ta"]].dropna().plot.line(ax=ax, marker=".")
     plt.title("Kills, errors, and total attempts")
 
     plt.figure(1)
     ax = plt.gca()
     df["ta"].dropna().rolling(4).mean().plot.line(ax=ax)
-    df["ta"].dropna().plot.line(ax=plt.gca())
+    df["ta"].dropna().plot.line(ax=plt.gca(), marker=".")
     plt.title("Total attempts and rolling mean")
 
     # I don't think this means anything, but it's cool.
@@ -107,12 +107,12 @@ if __name__ == "__main__":
     # Team analysis.
     plt.figure(3)
     ax = plt.gca()
-    df = team_df("./player_stats/")
+    team_df = get_team_df("./player_stats/")
 
     # Compute the average number of team kills per game in the 2016 season.
-    ks = df.ix["2016", "k"]
+    ks = team_df.ix["2016", "k"]
     means = ks.reset_index().groupby("Date").mean().dropna()
-    means.plot.line(ax=ax)
+    means.plot.line(ax=ax, marker=".")
     means.rolling(3).mean().plot.line(ax=ax, label="rolling mean")
     plt.title("Average number of 2016 team kills per game")
     plt.show()
