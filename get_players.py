@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-from bs4 import BeautifulSoup
-import urllib.request as req
 import os
+import urllib.request as req
+from bs4 import BeautifulSoup
 from urllib.parse import urljoin
 from progressbar import ProgressBar
 from pathlib import Path
