@@ -3,7 +3,7 @@ import numpy as np
 import model
 import pykov
 
-def simulate_game(max_points):
+def simulate_game(max_points=25):
     """Simulate a best of 5 Oglethorpe volleyball game.
 
     :max_points: Number of points a set is played to.
@@ -60,3 +60,36 @@ def simulate_set(max_points):
             opp += 1
 
         state = model.chain.move(state)
+
+def simulate_season(season_length=30):
+    """TODO: Docstring for simulate_season.
+
+    :season_length: TODO
+    :returns: TODO
+
+    """
+    return [simulate_game() for k in range(season_length)]
+
+def season_wins(n_games=30):
+    """TODO: Docstring for season_wins.
+
+    :n_games: TODO
+    :returns: TODO
+
+    """
+    return sum(simulate_season(n_games))
+
+def season_sample_histogram(n_seasons):
+    """
+    Plot a (probability distribution normalized) histogram of the number of
+    games won in `n_seasons` simulated seasons.
+
+    :n_seasons: TODO
+    :returns: TODO
+
+    """
+    wins = [season_wins() for k in range(n_seasons)]
+    plt.hist(wins, normed=True)
+    plt.title("Distribution of number of season wins")
+    plt.xlabel("Number of wins")
+    plt.ylabel("Probability")
