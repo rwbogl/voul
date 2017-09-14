@@ -115,7 +115,7 @@ if __name__ == "__main__":
     filter_high = lambda df: df["pct"].mean() >= top_percentile
     filter_low = lambda df: len(df["pct"].dropna()) > 0 and not filter_high(df)
 
-    team_scatter_plot(team_df_dict, "k", "e", filter_high)
+    team_scatter_plot(team_df_dict, "ta", "k", filter_high)
     xs = np.linspace(0, 50)
     plt.plot(xs, xs, c="k")
 
