@@ -5,6 +5,7 @@ from glob import glob
 import os.path as path
 import pandas as pd
 import matplotlib.pyplot as plt
+import numpy as np
 
 """
 analyze_player.py
@@ -80,39 +81,56 @@ def get_team_df(directory, ignore_index=False):
 
     return master_df
 
+def team_date_mean(team_df):
+    """TODO: Docstring for team_mean.
+
+    :team_df: TODO
+    :stat: TODO
+    :returns: TODO
+
+    """
+    return team_df.reset_index().groupby("Date").mean()
+
+def team_scatter_plot(team_df_dict, x, y, filter=None):
+    """TODO: Docstring for team_scatter_plot.
+
+    :team_df_dict: TODO
+    :returns: TODO
+
+    """
+    num = plt.figure()
+    ax = plt.gca()
+    for name, df in team_df_dict.items():
+        if filter and filter(df):
+            plt.plot(df[x], df[y], "o", label=name)
+
 if __name__ == "__main__":
     # Example analysis.
-    df = join_years("./player_stats/Evan--Furst/").reset_index()
-
     plt.style.use("ggplot")
-
-    plt.figure(0)
-    ax = plt.gca()
-    df[["k", "e", "ta"]].dropna().plot.line(ax=ax, marker=".")
-    plt.title("Kills, errors, and total attempts")
-
-    plt.figure(1)
-    ax = plt.gca()
-    df["ta"].dropna().rolling(4).mean().plot.line(ax=ax)
-    df["ta"].dropna().plot.line(ax=plt.gca(), marker=".")
-    plt.title("Total attempts and rolling mean")
-
-    # I don't think this means anything, but it's cool.
-    plt.figure(2)
-    ax = plt.gca()
-    cumsum = df["k"].cumsum().dropna()
-    (cumsum / cumsum.iloc[-1]).plot.area(alpha=.8, ax=ax)
-    plt.title("Normalized cumulative sum of number of kills")
-
-    # Team analysis.
-    plt.figure(3)
-    ax = plt.gca()
     team_df = get_team_df("./player_stats/")
 
-    # Compute the average number of team kills per game in the 2016 season.
-    ks = team_df.ix["2016", "k"]
-    means = ks.reset_index().groupby("Date").mean().dropna()
-    means.plot.line(ax=ax, marker=".")
-    means.rolling(3).mean().plot.line(ax=ax, label="rolling mean")
-    plt.title("Average number of 2016 team kills per game")
+    team_df_dict = get_player_dfs(glob("./player_stats/*"))
+
+    top_percentile = team_df["pct"].quantile(.6)
+    filter_high = lambda df: df["pct"].mean() >= top_percentile
+    filter_low = lambda df: len(df["pct"].dropna()) > 0 and not filter_high(df)
+
+    team_scatter_plot(team_df_dict, "k", "e", filter_high)
+    xs = np.linspace(0, 50)
+    plt.plot(xs, xs, c="k")
+
+    plt.xlabel("Total Attempts")
+    plt.ylabel("Kills")
+    plt.title("Players with mean PCT above 60th percentile")
+    plt.legend()
+
+    team_scatter_plot(team_df_dict, "ta", "k", filter_low)
+    xs = np.linspace(0, 45)
+    plt.plot(xs, xs, c="k")
+
+    plt.xlabel("Total Attempts")
+    plt.ylabel("Kills")
+    plt.title("Players with mean PCT below 60th percentile")
+    plt.legend()
+
     plt.show()
