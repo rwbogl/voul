@@ -31,15 +31,18 @@ def join_years(player_dir):
 
     return master_df
 
-def get_player_dfs(player_dirs):
-    """TODO: Docstring for get_player_dfs.
+def get_player_dfs(player_dir):
+    """
+    Return the player dataframes for every player in `player_dir/*`, using a
+    dictionary with player name as the key.
 
-    :players: TODO
-    :returns: TODO
+    :player_dir: Path to player stat directory.
+    :returns: Dictionary of (name, player_df) key-value pairs.
 
     """
-    df_dict = {}
+    player_dirs = glob(path.join(player_dir, "*"))
 
+    df_dict = {}
     for directory in player_dirs:
         name = path.basename(path.normpath(directory))
         df = join_years(directory)
@@ -72,8 +75,7 @@ def get_team_df(directory, ignore_index=False):
     :returns: TODO
 
     """
-    glob_path = path.join(directory, "*")
-    df_dict = get_player_dfs(glob(glob_path))
+    df_dict = get_player_dfs(directory)
     master_df = pd.DataFrame()
 
     for name, df in df_dict.items():
@@ -109,7 +111,7 @@ if __name__ == "__main__":
     plt.style.use("ggplot")
     team_df = get_team_df("./player_stats/")
 
-    team_df_dict = get_player_dfs(glob("./player_stats/*"))
+    team_df_dict = get_player_dfs("./player_stats/")
 
     top_percentile = team_df["pct"].quantile(.6)
     filter_high = lambda df: df["pct"].mean() >= top_percentile
