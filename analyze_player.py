@@ -46,7 +46,7 @@ def get_player_dfs(player_dirs):
 
     return df_dict
 
-def team_df(directory, ignore_index=False):
+def get_team_df(directory, ignore_index=False):
     """Return the dataframe that contains every player on the team.
 
     This...probably doesn't do what we want just yet. Games won't be assigned
