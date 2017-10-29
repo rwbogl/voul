@@ -33,17 +33,18 @@ def estimate_transition_probs(set_scores):
     :returns: 2x2 numpy matrix, approximating the transition probabilities.
 
     """
-    # Our states are "OU scores" and "OPP scores."
+    # Our states are "OU scores" (1) and "OPP scores" (0).
     transition_counts = np.zeros((2, 2))
 
     # transition_counts[i, j] is the number of times j transitions to i. (This
     # is backwards with respect to many texts, but it's how I learned it.)
 
     for set_score in set_scores:
-        # We can find the "OU scores" and "OPP scores" by taking the difference
-        # of OU's score at each step. If the difference is 0, OPP scored. If it
-        # is 1, OU scored.
+        # We can find the "OU scores" and "OPP scores" moments by taking the
+        # difference of OU's score at each step. If the difference is 0, OPP
+        # scored. If it is 1, OU scored.
         states = np.diff(set_score)
+
         for k in range(len(states) - 1):
             to_state = states[k + 1]
             from_state = states[k]
@@ -106,4 +107,4 @@ chain = pykov.Chain({
             ("OU", "OPP"): P[0, 1],
             ("OU", "OU"): P[1, 1],
             ("OPP", "OU"): P[1, 0],
-            ("OPP", "OPP"): P[1, 1]})
+            ("OPP", "OPP"): P[0, 0]})
