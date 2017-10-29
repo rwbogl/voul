@@ -48,6 +48,11 @@ def estimate_transition_probs(set_scores):
         for k in range(len(states) - 1):
             to_state = states[k + 1]
             from_state = states[k]
+            if (not to_state in [0, 1]) or (not from_state in [0, 1]):
+                # For whatever reason, the point difference isn't 0 or 1. We
+                # can't do anything with this, so move on.
+                continue
+
             transition_counts[to_state, from_state] += 1
 
     # The MLE estimator is p_{ij} = T[i, j] / Σ_k T[k, j], where T is the
