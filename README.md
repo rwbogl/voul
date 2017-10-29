@@ -11,7 +11,7 @@ which could in theory be used to predict the performance of the team.
 The Oglethorpe volleyball team makes a good deal of their data publicly
 available, but not in a convenient format. Thus, we scrape almost all of our
 data from the team's website. The code to do this is in the files
-[get_boxlines.py](./get_boxlines.py) and [./get_players.py](./get_players.py).
+[get_boxlines.py](./get_boxlines.py) and [get_players.py](./get_players.py).
 It was written by staring at the site's HTML and hacking things together until
 it worked.
 
@@ -21,7 +21,7 @@ log](http://www.gopetrels.com/sports/wvball/2017-18/teams/oglethorpe?view=gamelo
 change the appropriate constants in [get_boxlines.py](./get_boxlines.py), then
 run it. This should create a directory with webpages of each game. Then,
 setting the appropriate constants in
-[./parse_boxscores.py](./parse_boxscore.py) and run it. This will create a CSV
+[parse_boxscores.py](./parse_boxscores.py) and run it. This will create a CSV
 of the boxscore statistics.
 
 To gather player statistics, I follow the exact same procedure, but download
